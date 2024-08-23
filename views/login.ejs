@@ -1,29 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include("./partiales/header.ejs") %>
 
-<head>
-    <meta charset="UTF-8">
-   
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
+    <!doctype html>
+    <html>
 
-<body>
-    <h1>
-        Login
-    </h1>
-    <form action="/login" method="POST">
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" name="email" id="email" required />
+    <head>
+        <title>Node Authentication</title>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+        <style>
+            body {
+                padding-top: 80px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="col-sm-6 col-sm-offset-3">
+
+                <h1><span class="fa fa-sign-in"></span> Login</h1>
+
+              
+
+                        <!-- LOGIN FORM -->
+                        <form action="/login" method="post">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="text" class="form-control" name="email">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" class="form-control" name="password">
+                            </div>
+
+                            <button type="submit" class="btn btn-warning btn-lg">Login</button>
+                        </form>
+
+                        <hr>
+
+                        <p>Need an account? <a href="/signup">Signup</a></p>
+                        <p>Or go <a href="/">home</a>.</p>
+
+                        <div class="text-center">
+                            <p>A demo by <a href="http://scotch.io">Scotch</a>.</p>
+                            <p>Visit the <a
+                                    href="http://scotch.io/tutorials/javascript/easy-node-authentication-setup-and-local">tutorial</a>.
+                            </p>
+                        </div>
+
+            </div>
         </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password" required />
-        </div>
-        <button type="submit">Login</button>
-    </form>
+    </body>
 
-</body>
-
-</html>
+    </html>

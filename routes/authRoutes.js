@@ -1,6 +1,7 @@
 import express from "express";
 import {
   login,
+  logout,
   register,
   renderLogin,
   renderRegister,
@@ -17,5 +18,8 @@ userRouter.post("/register", register);
 userRouter.get("/login", renderLogin);
 // render register page
 userRouter.get("/register", renderRegister);
+
+
+userRouter.get('/logout',logout); 
 
 export default userRouter;
