@@ -8,6 +8,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
 import postRoutes from "./routes/postRoutes.js";
+import errohandler from "./middlewares/errorhandler.js";
 
 // dotenv
 dotenv.config();
@@ -58,6 +59,9 @@ app.get("/", (req, res) => {
   });
 });
 
+
+// Error handler
+ap.use(errohandler);
 // Port configuration
 const PORT = process.env.PORT || 3000;
 

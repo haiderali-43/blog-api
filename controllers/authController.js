@@ -1,9 +1,10 @@
 import passport from "passport";
 import User from "../models/User.js";
 import bcryptjs from "bcryptjs";
+import aysncHandler from "express-async-handler";
 
 // Register a new user
-export const register = async (req, res) => {
+export const register = aysncHandler(async (req, res) => {
   const { username, email, password } = req.body;
   try {
     const existingUser = await User.findOne({ email });
@@ -28,10 +29,10 @@ export const register = async (req, res) => {
     // Send an error response
     return res.status(500).json({ message: "Server error" });
   }
-};
+});
 
 // Login a user
-export const login = async (req, res, next) => {
+export const login = aysncHandler(async (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
 
@@ -50,32 +51,32 @@ export const login = async (req, res, next) => {
       return res.redirect("/");
     });
   })(req, res, next); // This is the correct way to call it
-};
+});
 
 // Render login page
-export const renderLogin = (req, res) => {
+export const renderLogin = aysncHandler((req, res) => {
   res.render("login", {
     title: "Login",
     user: req.user,
 
     error: "",
   });
-};
+});
 
 // Render register page
-export const renderRegister = (req, res) => {
+export const renderRegister = aysncHandler((req, res) => {
   res.render("register", {
     title: "Register",
     user: req.user,
     error: "",
   });
-};
+});
 
-export const logout = (req, res) => {
+export const logout = aysncHandler((req, res) => {
   req.logout((err) => {
     if (err) {
       return res.status(500).json({ message: "Server error" });
     }
   });
   res.redirect("/");
-};
+});
