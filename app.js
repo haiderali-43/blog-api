@@ -9,6 +9,8 @@ import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
 import postRoutes from "./routes/postRoutes.js";
 import errohandler from "./middlewares/errorhandler.js";
+import commentRoutes from "./routes/commentRoutes.js";
+import methodOverride from "method-override";
 
 // dotenv
 dotenv.config();
@@ -23,6 +25,7 @@ app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(methodOverride("_method"));
 
 // Session middleware
 app.use(
@@ -48,6 +51,7 @@ dbConfig();
 // Routes
 app.use("/", authRoutes);
 app.use("/posts", postRoutes);
+app.use('/', commentRoutes);
 
 
 

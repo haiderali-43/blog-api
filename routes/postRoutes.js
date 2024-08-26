@@ -1,7 +1,9 @@
 import express from "express";
 import {
   createPost,
+  deletePost,
   getAllPosts,
+  getEditPostForm,
   renderPostform,
   renderPosts,
 } from "../controllers/postController.js";
@@ -19,9 +21,17 @@ postRouter.post(
 );
 postRouter.get("/allposts", renderPosts);
 
+// fetch post by id
+postRouter.get("/post/:id", getPostbyId);
 
+// edit post
+postRouter.get("/post/:id/edit", getEditPostForm);
 
 // fetch all posts
 postRouter.get("/allposts", getAllPosts);
+
+
+//delete post
+postRouter.delete("/post/:id", deletePost);
 
 export default postRouter;

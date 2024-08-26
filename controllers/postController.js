@@ -86,3 +86,67 @@ export const getAllPosts = aysncHandler(async (req, res) => {
     console.log(error);
   }
 });
+
+export const getPostbyId = aysncHandler(async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id)
+      .populate("author", "username")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "author",
+          model: "User",
+        },
+      });
+    res.render("post", {
+      title: post.title,
+      user: req.user,
+      post,
+      success: "",
+      error: "",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+export const getEditPostForm = aysncHandler(async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    res.render("editPost", {
+      title: "Edit Post",
+      user: req.user,
+      post,
+      success: "",
+      error: "",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+export const deletePost = aysncHandler(async (req, res) => {
+  try {
+    const Post = await Post.findById(req.params.id);
+    if(Post.author.toString() !== req.user._id.toString()){
+      return res.render("allposts", {
+        title: "Posts",
+        user: req.user,
+        success: "",
+        error: "You are not authorized to delete this post",
+      });
+    }
+
+    await Promise.all(
+      Post.images.map(async (image) => {
+        await File.findByIdAndDelete(image._id);
+      }
+    ));
+
+    await Post.remove();
+
+
+  } catch (error) {
+    console.log(error);
+  }
+});
