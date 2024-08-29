@@ -11,6 +11,7 @@ import postRoutes from "./routes/postRoutes.js";
 import errohandler from "./middlewares/errorhandler.js";
 import commentRoutes from "./routes/commentRoutes.js";
 import methodOverride from "method-override";
+import userRoutes from "./routes/userRoutes.js";
 
 // dotenv
 dotenv.config();
@@ -52,6 +53,7 @@ dbConfig();
 app.use("/", authRoutes);
 app.use("/posts", postRoutes);
 app.use('/', commentRoutes);
+app.use('/user', userRoutes);
 
 
 
