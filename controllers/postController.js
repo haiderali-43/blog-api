@@ -2,27 +2,9 @@ import Post from "../models/Post.js";
 import File from "../models/File.js";
 import aysncHandler from "express-async-handler";
 
-export const renderPostform = aysncHandler((req, res) => {
-  res.render("newPost", {
-    title: "New Post",
-    user: req.user,
-    error: "",
-  });
-});
-
 export const createPost = aysncHandler(async (req, res) => {
   try {
     const { title, content } = req.body;
-    // validation
-    if (!req.files || req.files.length === 0) {
-      res.render("newPost", {
-        title: "New Post",
-        user: req.user,
-        success: "",
-
-        errorMessage: "Please upload at least one image",
-      });
-    }
 
     const images = await Promise.all(
       req.files.map(async (file) => {
@@ -48,25 +30,25 @@ export const createPost = aysncHandler(async (req, res) => {
     });
 
     await newPost.save();
-    res.render("newPost", {
-      title: "New Post",
-      user: req.user,
-      successMessage: "Post created successfully",
-    });
-    res.redirect("/allposts");
+
+    res.status(201).json({ message: "Post created successfully" });
   } catch (error) {
     console.log(error);
   }
 });
 
-export const renderPosts = aysncHandler(async (req, res) => {
+export const updatePost = aysncHandler(async (req, res) => {
   try {
-    const posts = await Post.find();
-    res.render("allposts", {
-      title: "Posts",
-      user: req.user,
-      posts,
-    });
+    const { title, content } = req.body;
+
+    const post = await Post.findById(req.params.id);
+
+    post.title = title;
+    post.content = content;
+
+    await post.save();
+
+    res.status(200).json({ message: "Post updated successfully" });
   } catch (error) {
     console.log(error);
   }
@@ -75,13 +57,7 @@ export const renderPosts = aysncHandler(async (req, res) => {
 export const getAllPosts = aysncHandler(async (req, res) => {
   try {
     const posts = await Post.find().populate("author", "username");
-    res.render("allposts", {
-      title: "Posts",
-      user: req.user,
-      posts,
-      success: "",
-      error: "",
-    });
+    res.status(200).json(posts);
   } catch (error) {
     console.log(error);
   }
@@ -89,7 +65,7 @@ export const getAllPosts = aysncHandler(async (req, res) => {
 
 export const getPostbyId = aysncHandler(async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id)
+    const postbyid = await Post.findById(req.params.id)
       .populate("author", "username")
       .populate({
         path: "comments",
@@ -98,28 +74,7 @@ export const getPostbyId = aysncHandler(async (req, res) => {
           model: "User",
         },
       });
-    res.render("post", {
-      title: post.title,
-      user: req.user,
-      post,
-      success: "",
-      error: "",
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-export const getEditPostForm = aysncHandler(async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id);
-    res.render("editPost", {
-      title: "Edit Post",
-      user: req.user,
-      post,
-      success: "",
-      error: "",
-    });
+    res.status(200).json(postbyid);
   } catch (error) {
     console.log(error);
   }
@@ -128,24 +83,14 @@ export const getEditPostForm = aysncHandler(async (req, res) => {
 export const deletePost = aysncHandler(async (req, res) => {
   try {
     const Post = await Post.findById(req.params.id);
-    if(Post.author.toString() !== req.user._id.toString()){
-      return res.render("allposts", {
-        title: "Posts",
-        user: req.user,
-        success: "",
-        error: "You are not authorized to delete this post",
-      });
-    }
 
     await Promise.all(
       Post.images.map(async (image) => {
         await File.findByIdAndDelete(image._id);
-      }
-    ));
+      })
+    );
 
     await Post.remove();
-
-
   } catch (error) {
     console.log(error);
   }

@@ -18,13 +18,10 @@ export const getUserProfile = asynchandler(async (req, res) => {
       createdAt: -1,
     });
 
-    res.render("profile", {
-        title: "Profile",
-        user,
-        posts,
-        });
+    
 
 
-
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 });

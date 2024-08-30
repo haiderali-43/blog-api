@@ -19,8 +19,7 @@ dotenv.config();
 // Initialize the app
 const app = express();
 
-// Set view engine
-app.set("view engine", "ejs");
+
 
 // Middleware
 app.use(express.json());
@@ -59,10 +58,7 @@ app.use('/user', userRoutes);
 
 //home route
 app.get("/", (req, res) => {
-  res.render("home", {
-    title: "Home",
-    user: req.user,
-  });
+  res.send("Welcome to the blog app");
 });
 
 

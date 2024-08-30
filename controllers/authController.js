@@ -23,7 +23,7 @@ export const register = aysncHandler(async (req, res) => {
     });
     await newUser.save();
 
-    res.redirect("/login");
+    res.status(201).json({ message: "User created successfully" });
   } catch (error) {
     console.log(error);
     // Send an error response
@@ -35,42 +35,19 @@ export const register = aysncHandler(async (req, res) => {
 export const login = aysncHandler(async (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
-
     if (!user) {
-      // Render login page with an error message if user is not found
-      return res.render("login", {
-        title: "Login",
-        user: req.user, // Make sure you're using req.body for email
-        error: info.message,
-      });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
-
     req.logIn(user, (err) => {
       if (err) return next(err);
-      // Redirect to homepage on successful login
-      return res.redirect("/");
+      return res.status(200).json({ message: "User logged in successfully" });
     });
   })(req, res, next); // This is the correct way to call it
 });
 
 // Render login page
-export const renderLogin = aysncHandler((req, res) => {
-  res.render("login", {
-    title: "Login",
-    user: req.user,
-
-    error: "",
-  });
-});
 
 // Render register page
-export const renderRegister = aysncHandler((req, res) => {
-  res.render("register", {
-    title: "Register",
-    user: req.user,
-    error: "",
-  });
-});
 
 export const logout = aysncHandler((req, res) => {
   req.logout((err) => {

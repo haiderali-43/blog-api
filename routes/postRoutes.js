@@ -4,7 +4,6 @@ import {
   deletePost,
   getAllPosts,
   getEditPostForm,
-  renderPostform,
   renderPosts,
 } from "../controllers/postController.js";
 import uploadfile from "../config/multer.js";
@@ -12,7 +11,7 @@ import { isAuthenicated } from "../middlewares/auth.js";
 
 const postRouter = express.Router();
 
-postRouter.get("/postform", renderPostform);
+
 postRouter.post(
   "/create",
   isAuthenicated,
